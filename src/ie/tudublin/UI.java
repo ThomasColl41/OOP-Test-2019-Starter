@@ -9,7 +9,62 @@ import processing.data.*;
 
 public class UI extends PApplet
 
-{	public void separate(int value)
+{	
+	ArrayList<Colour> colours = new ArrayList<Colour>();
+	ArrayList<Resistor> resistors = new ArrayList<Resistor>();
+
+	
+
+	public void loadColours()
+	{
+		Table t = loadTable("colours.csv", "header");
+		for(TableRow tr:t.rows())
+		{
+			Colour c = new Colour(tr);
+			colours.add(c);
+		}
+	}
+
+	public void loadResistors()
+	{
+		Table t = loadTable("resistors.csv");
+		for(TableRow tr:t.rows())
+		{
+			Resistor r = new Resistor(tr.getInt(0));
+			resistors.add(r);
+		}
+	}
+
+	public void printColours()
+    {
+        for(Colour c:colours)
+        {
+            println(c);
+		}
+	}
+	
+	public Colour findColour(int value)
+    {
+		for(Colour c:colours)
+		{
+			if(value == c.value)
+			{
+				return c;
+			}
+		}
+
+		return null;
+	}
+	
+	public void drawResistors()
+	{
+		for(Resistor r:resistors)
+		{
+			r.render(this, colours);
+		}
+	}
+
+	public void separate(int value)
 	{
 		int hundreds = (value / 100);
 		int tens = (value - (hundreds * 100)) / 10;
@@ -30,9 +85,14 @@ public class UI extends PApplet
 
 	public void setup() 
 	{
+		loadColours();
+		loadResistors();
+		printColours();
 	}
 	
 	public void draw()
-	{			
+	{
+		background(150);
+		drawResistors();
 	}
 }
